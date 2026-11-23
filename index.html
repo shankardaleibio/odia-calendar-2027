@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="or">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#721d18">
+<title>୨୦୨୭ ଓଡ଼ିଆ କ୍ୟାଲେଣ୍ଡର</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Oriya:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red:#721d18;
+  --dark:#3b100d;
+  --gold:#e8b85d;
+  --cream:#fff8e8;
+  --green:#426b42;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:#f5e8d1;color:#40251c;
+  font-family:'Noto Sans Oriya',sans-serif;
+}
+.hero{
+  text-align:center;padding:35px 15px;
+  color:#fff3d2;
+  background:
+  repeating-linear-gradient(45deg,transparent 0 12px,#ffffff08 12px 14px),
+  linear-gradient(135deg,#38100d,#87251c,#a44a24);
+  border-bottom:5px solid var(--gold);
+  position:relative;
+}
+.hero:after{
+  content:"✿  ❖  ✿  ❖  ✿  ❖  ✿";
+  display:block;color:var(--gold);
+  margin-top:15px;letter-spacing:5px;
+}
+.hero h1{font-size:clamp(25px,6vw,42px);margin:12px 0}
+.hero .art{font-size:48px}
+.hero p{font-size:13px;color:#f6dca6}
+.container{max-width:950px;margin:auto;padding:15px}
+.controls{
+  display:flex;gap:8px;justify-content:center;
+  align-items:center;flex-wrap:wrap;margin:15px 0;
+}
+button,select{
+  font:inherit;border:1px solid #bd9251;
+  padding:10px 13px;border-radius:10px;
+  background:var(--cream);color:var(--red);
+}
+button{cursor:pointer}
+button:hover{background:#f0d8a8}
+#monthName{text-align:center;color:var(--red);font-size:25px;margin:20px 0}
+.calendar{
+  background:var(--cream);border:2px solid #c49a55;
+  border-radius:15px;overflow:hidden;
+}
+.grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.week div{
+  text-align:center;background:#7b241c;color:#fff0cb;
+  padding:10px 1px;font-size:12px;
+}
+.day{
+  min-height:90px;padding:6px 3px;
+  border-right:1px solid #ead6b3;
+  border-top:1px solid #ead6b3;
+  position:relative;cursor:pointer;
+}
+.day:nth-child(7n){border-right:0}
+.day.empty{background:#f1e5d1}
+.day.today{background:#e3f0dc;outline:2px solid var(--green);outline-offset:-3px}
+.day.selected{background:#f7dfac;outline:2px solid #a75c23;outline-offset:-3px}
+.day .num{font-weight:800;font-size:18px}
+.day .en{font-size:10px;color:#917b60}
+.day .event{font-size:10px;color:#a12b20;font-weight:700;margin-top:5px;line-height:1.4}
+.day.has-event{background:#fff1d8}
+.details{
+  background:#fff8e8;border:1px solid #d7b778;
+  border-radius:13px;padding:16px;margin-top:15px;
+}
+.details h3{margin:0 0 8px;color:var(--red)}
+.festival-list{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:10px;
+}
+.festival{
+  background:#f5e8d1;border-left:4px solid #9b3825;
+  border-radius:8px;padding:10px;font-size:13px;
+}
+.festival b{display:block;color:#78251c}
+.culture{
+  margin-top:20px;text-align:center;padding:22px;
+  color:#fff0ce;background:linear-gradient(135deg,#49140f,#86271e);
+  border:3px double var(--gold);border-radius:15px;
+}
+.culture p{font-size:13px;line-height:2}
+footer{text-align:center;padding:20px;color:#805b40;font-size:12px}
+@media(max-width:500px){
+ .container{padding:8px}
+ .day{min-height:70px;padding:4px 2px}
+ .day .num{font-size:15px}
+ .day .event{font-size:9px}
+ .week div{font-size:10px}
+}
+@media print{
+ .controls,footer{display:none}
+ body{background:white}
+ .day{min-height:75px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="art">🛕 🪷 🚩</div>
+  <h1>୨୦୨୭ ଓଡ଼ିଆ କ୍ୟାଲେଣ୍ଡର</h1>
+  <h3>ଶୁଭ ନବବର୍ଷ ୨୦୨୭</h3>
+  <p>ଜୟ ଜଗନ୍ନାଥ • ଉତ୍କଳର ପରମ୍ପରା • ଆମ ସଂସ୍କୃତି</p>
+</header>
+
+<main class="container">
+  <div class="controls">
+    <button onclick="changeMonth(-1)">❮</button>
+    <select id="monthSelect" onchange="selectMonth()"></select>
+    <button onclick="changeMonth(1)">❯</button>
+    <button onclick="goToday()">ଆଜି</button>
+    <button onclick="window.print()">🖨 Print</button>
+  </div>
+
+  <h2 id="monthName"></h2>
+
+  <section class="calendar">
+    <div class="grid week" id="week"></div>
+    <div class="grid" id="calendar"></div>
+  </section>
+
+  <section class="details" id="details">
+    <h3>📅 ତାରିଖ ବାଛନ୍ତୁ</h3>
+    ଯେକୌଣସି ଦିନ ଉପରେ କ୍ଲିକ୍ କରି ପର୍ବର ବିବରଣୀ ଦେଖନ୍ତୁ।
+  </section>
+
+  <section class="details">
+    <h3>🌺 ୨୦୨୭ ପ୍ରମୁଖ ପର୍ବପର୍ବାଣୀ</h3>
+    <div class="festival-list" id="festivalList"></div>
+  </section>
+
+  <section class="culture">
+    <div style="font-size:43px">🙏 🚩 🪷</div>
+    <h2>ଆମ ଓଡ଼ିଶା, ଆମ ଗର୍ବ</h2>
+    <p>
+      ଶ୍ରୀଜଗନ୍ନାଥ ସଂସ୍କୃତି<br>
+      ପଟ୍ଟଚିତ୍ର କଳା • କୋଣାର୍କ ମନ୍ଦିର<br>
+      ରଥଯାତ୍ରା • ରଜ ପର୍ବ • ନୂଆଖାଇ
+    </p>
+    <h3>ଜୟ ଜଗନ୍ନାଥ 🙏</h3>
+  </section>
+</main>
+
+<footer>
+  ୨୦୨୭ ଓଡ଼ିଆ କ୍ୟାଲେଣ୍ଡର<br>
+  Made with ❤️ for Odisha
+</footer>
+
+<script>
+const months=[
+"ଜାନୁଆରୀ","ଫେବୃଆରୀ","ମାର୍ଚ୍ଚ","ଏପ୍ରିଲ",
+"ମଇ","ଜୁନ","ଜୁଲାଇ","ଅଗଷ୍ଟ",
+"ସେପ୍ଟେମ୍ବର","ଅକ୍ଟୋବର","ନଭେମ୍ବର","ଡିସେମ୍ବର"
+];
+
+const englishMonths=[
+"January","February","March","April","May","June",
+"July","August","September","October","November","December"
+];
+
+const weekdays=[
+"ରବି","ସୋମ","ମଙ୍ଗଳ","ବୁଧ","ଗୁରୁ","ଶୁକ୍ର","ଶନି"
+];
+
+function odia(n){
+ return String(n).replace(/[0-9]/g,d=>"୦୧୨୩୪୫୬୭୮୯"[d]);
+}
+
+const festivals={
+"2027-01-14":["ମକର ସଂକ୍ରାନ୍ତି","🌞"],
+"2027-01-26":["ସାଧାରଣତନ୍ତ୍ର ଦିବସ","🇮🇳"],
+"2027-02-11":["ସରସ୍ୱତୀ ପୂଜା","📚"],
+"2027-03-06":["ମହା ଶିବରାତ୍ରି","🔱"],
+"2027-03-22":["ଦୋଳ ପୂର୍ଣ୍ଣିମା","🌸"],
+"2027-03-23":["ହୋଲି","🎨"],
+"2027-04-01":["ଉତ୍କଳ ଦିବସ","🏵️"],
+"2027-04-14":["ପଣା ସଂକ୍ରାନ୍ତି / ଓଡ଼ିଆ ନବବର୍ଷ","🌿"],
+"2027-04-15":["ଶ୍ରୀରାମ ନବମୀ","🏹"],
+"2027-05-09":["ଅକ୍ଷୟ ତୃତୀୟା","🌾"],
+"2027-06-04":["ସାବିତ୍ରୀ ଅମାବାସ୍ୟା","🌺"],
+"2027-06-14":["ପହିଲି ରଜ","🎡"],
+"2027-06-15":["ରଜ ସଂକ୍ରାନ୍ତି","🌱"],
+"2027-06-18":["ସ୍ନାନ ପୂର୍ଣ୍ଣିମା","🛕"],
+"2027-07-05":["ଶ୍ରୀଗୁଣ୍ଡିଚା ରଥଯାତ୍ରା","🚩"],
+"2027-07-13":["ବାହୁଡ଼ା ଯାତ୍ରା","🚩"],
+"2027-07-14":["ସୁନାବେଶ","✨"],
+"2027-08-17":["ଗହ୍ମା ପୂର୍ଣ୍ଣିମା","🌕"],
+"2027-08-24":["ଜନ୍ମାଷ୍ଟମୀ","🦚"],
+"2027-09-04":["ଗଣେଶ ପୂଜା","🐘"],
+"2027-09-05":["ନୂଆଖାଇ","🌾"],
+"2027-09-30":["ମହାଳୟା","🪔"],
+"2027-10-02":["ଗାନ୍ଧୀ ଜୟନ୍ତୀ","🕊️"],
+"2027-10-06":["ମହା ସପ୍ତମୀ","🌺"],
+"2027-10-07":["ମହା ଅଷ୍ଟମୀ","🔱"],
+"2027-10-08":["ମହା ନବମୀ","🪷"],
+"2027-10-10":["ବିଜୟା ଦଶମୀ","🏹"],
+"2027-10-15":["କୁମାର ପୂର୍ଣ୍ଣିମା","🌕"],
+"2027-10-29":["ଦୀପାବଳି","🪔"],
+"2027-11-14":["କାର୍ତ୍ତିକ ପୂର୍ଣ୍ଣିମା / ବୋଇତ ବନ୍ଦାଣ","⛵"],
+"2027-12-25":["ବଡ଼ଦିନ","🎄"]
+};
+
+let month=0;
+let selected="";
+
+const select=document.getElementById("monthSelect");
+months.forEach((m,i)=>{
+ let option=document.createElement("option");
+ option.value=i;
+ option.textContent=m+" · "+englishMonths[i];
+ select.appendChild(option);
+});
+
+document.getElementById("week").innerHTML=
+ weekdays.map(d=>`<div>${d}</div>`).join("");
+
+function render(){
+ select.value=month;
+ document.getElementById("monthName").innerHTML=
+ months[month]+" · "+englishMonths[month]+" 2027";
+
+ const first=new Date(2027,month,1).getDay();
+ const total=new Date(2027,month+1,0).getDate();
+ const now=new Date();
+ let html="";
+
+ for(let i=0;i<first;i++){
+  html+='<div class="day empty"></div>';
+ }
+
+ for(let d=1;d<=total;d++){
+  const key=`2027-${String(month+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+  const event=festivals[key];
+  const isToday=now.getFullYear()===2027 &&
+    now.getMonth()===month && now.getDate()===d;
+
+  html+=`
+   <div class="day ${event?'has-event':''} ${isToday?'today':''} ${selected===key?'selected':''}"
+        onclick="showDate('${key}')">
+     <div class="num">${odia(d)}</div>
+     <div class="en">${d}</div>
+     ${event?`<div class="event">${event[1]} ${event[0]}</div>`:""}
+   </div>`;
+ }
+ document.getElementById("calendar").innerHTML=html;
+}
+
+function changeMonth(step){
+ month=(month+step+12)%12;
+ render();
+}
+
+function selectMonth(){
+ month=Number(select.value);
+ render();
+}
+
+function goToday(){
+ const now=new Date();
+ month=now.getFullYear()===2027?now.getMonth():0;
+ render();
+}
+
+function showDate(key){
+ selected=key;
+ render();
+ const event=festivals[key];
+ const [year,mon,day]=key.split("-").map(Number);
+ const date=new Date(year,mon-1,day);
+ const dayName=date.toLocaleDateString("en-IN",{weekday:"long"});
+ document.getElementById("details").innerHTML=`
+  <h3>📅 ${odia(day)} ${months[mon-1]} ୨୦୨୭</h3>
+  <p>English date: ${day} ${englishMonths[mon-1]} 2027</p>
+  <p>Day: ${dayName}</p>
+  ${event?`<h3>${event[1]} ${event[0]}</h3>`:
+  "<p>ଏହି ଦିନ ପାଇଁ କୌଣସି ପର୍ବ ଯୋଡ଼ାଯାଇନାହିଁ।</p>"}`;
+}
+
+const list=document.getElementById("festivalList");
+Object.entries(festivals).sort().forEach(([key,event])=>{
+ const [y,m,d]=key.split("-").map(Number);
+ const card=document.createElement("div");
+ card.className="festival";
+ card.innerHTML=`<b>${event[1]} ${event[0]}</b>
+ ${d} ${englishMonths[m-1]} 2027`;
+ list.appendChild(card);
+});
+
+render();
+</script>
+</body>
+</html>
