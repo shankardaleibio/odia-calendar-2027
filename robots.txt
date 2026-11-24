@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shankardaleibio.github.io/odia-calendar-2027/sitemap.xml
